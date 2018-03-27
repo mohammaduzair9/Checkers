@@ -188,7 +188,45 @@ void welcome(){
 
 /*function definition for instructions*/
 int instruction(){
+	SetConsoleTitle( TEXT( "Instructions - The Checkers" ) );
+	system("CLS");                             //clear the screen
+	char instruct[13][107]={{"                                          Instructions"},
+						 {"\x10 Movement \x11 Basic movement is to move a checker one space diagonally forward"},
+						 {"You can not move a checker backwards until it becomes a King,"},
+						 {"\x10 Jumping \x11 If one of your opponent's checkers is on a forward diagonal next to one of your checkers."},
+						 {"and the next space beyond the opponent's checker is empty"},
+						 {"then your checker must jump the opponent's checker and land in the space beyond."},
+						 {"Your opponent's checker is captured and removed from the board. After making one jump,"},
+						 {"your checker might have another jump available from its new position. Your checker must take that jump ."},
+						 {"It must continue to jump until there are no more jumps available. Both men and kings are allowed"},
+						 {"to make multiple jumps. "},
+						 {"\x10 Crowning \x11 When one of your checkers reaches the opposite side of the board, it is crowned "},
+						 {"and becomes a King. Your turn ends there. A King can move backward as well as forward along the diagonals."},
+						 {"It can only move a distance of one space. "}};
 
+	/* Start printing box for instructions */
+	position(20,5);
+	for(int i=0; i<113;i++)
+		printf("\x16");
+	puts("");
+	for(int row=0;row<40;row++)
+		printf("\t\t    \x19                                                                                                               \x19\n");
+	position(20,45);
+	for(int i=0; i<113;i++)
+		printf("\x16");
+	/* End printing box for instructions */
+
+	//Start printing instructions with animation
+	for(int row=0;row<13;row++){
+		position(23,7+3*row);
+		for(int col=0;col<107;col++){
+			printf("%c",instruct[row][col]);
+			_sleep(5);
+		}
+	}
+	position(25,47);
+	system("PAUSE");
+	return 0;
 }
 
 //defining the toss function
