@@ -231,16 +231,133 @@ int instruction(){
 
 //defining the toss function
 int toss(){
+	SetConsoleTitle( TEXT( "Toss - The Checkers" ) );
+	system("CLS");                                       //clear screen
+	int toss,result;
+	puts("\n\n\n\n");
+	printf("\t\t\t\t\t\t  :::::::::::       ::::::::       ::::::::       :::::::: \n");
+	printf("\t\t\t\t\t\t     :+:          :+:    :+:     :+:    :+:     :+:    :+: \n");
+	printf("\t\t\t\t\t\t    +:+          +:+    +:+     +:+            +:+         \n");
+	printf("\t\t\t\t\t\t   +#+          +#+    +:+     +#++:++#++     +#++:++#++   \n");
+	printf("\t\t\t\t\t\t  +#+          +#+    +#+            +#+            +#+    \n");
+	printf("\t\t\t\t\t\t #+#          #+#    #+#     #+#    #+#     #+#    #+#     \n");
+	printf("\t\t\t\t\t\t###           ########       ########       ########       ");
 
+	srand(time(NULL));									//randomizing the toss
+	toss = 1+rand()%2;
+	/* Start printing box for toss */
+	position(39,15);
+	for(int i=0; i<72;i++){
+		printf("\x16");
+		for (int j=72;j<i;j++){
+			position(39,16);
+			printf("\x19 \t\t\t\t\t\t\t\t      \x19");
+		}
+	}
+	puts("");
+	for(int row=0;row<28;row++)
+		printf("\t\t\t\t       \x19\t\t                                                      \x19\n"); 
+	position(39,43);
+	for(int i=0; i<72;i++)
+		printf("\x16");
+	/* End printing box for toss */
+
+	if (toss == 1){		
+		position(57,17);		printf("___  _    ____ _   _ ____ ____    .\n");
+		position(57,18);		printf("|__] |    |__|  \\_/  |___ |__/   /| \n");
+		position(57,19);		printf("|    |___ |  |   |   |___ |  \\   _|_\n");                    
+		position(63,23);		printf("\x10 Head \x11  or  \x10 Tail \x11");
+		result = tossSelect();                         //call tossSelect function as player1
+		
+		if(result==1)
+			return 1;
+		else if(result==2)
+			return 2;
+	}
+	else if (toss == 2){
+		position(56,17);		printf("___  _    ____ _   _ ____ ____    ___\n");
+		position(56,18);		printf("|__] |    |__|  \\_/  |___ |__/   '___\\\n");
+		position(56,19);		printf("|    |___ |  |   |   |___ |  \\   |____\n");		
+		position(63,23);		printf("\x10 Head \x11  or  \x10 Tail \x11");
+		result = tossSelect();                         //call tossSelect function as player2
+		
+		//if player 2 calls the function then, result will be reversed to know the correct result
+		if(result==1)                                 
+			return 2;
+		if(result==2)
+			return 1;
+	}
 }
 
 int tossSelect(){
+    int result;
+	char select[5];
+	position(72,25);
+	fgets(select,5,stdin);
 
+	if(strcmp(select, "head") == 0 ||strcmp(select, "Head") == 0 || strcmp(select, "HEAD") == 0 ){
+		result = tossResult('H');							      //store tossResult in result
+		return result;
+	}
+		
+	else if(strcmp(select, "tail") == 0 ||strcmp(select, "Tail") == 0 || strcmp(select, "TAIL") == 0){
+		result =  tossResult('T');								  //store tossResult in result
+		return result;
+	}
+	else {
+		position(67,27);
+		printf("[Invalid Input]");
+		_sleep(500);
+		system("CLS");
+		toss();
+	}
 }	
 
 int tossResult(char select){
+	int posX = 57,random,print;
+	random = 1 + rand()%2;
+	
+	if (random == 1) 
+		print=20;
+	else
+		print=19;
 
-}		
+	for (int i=1; i<20; i++){
+		_sleep(100);
+		position(posX,29);		printf("########    ###    #### ##       \t ");
+		position(posX,30);		printf("   ##      ## ##    ##  ##       \t ");
+		position(posX,31);		printf("   ##    ##     ##  ##  ##       \t ");
+		position(posX,32);		printf("   ##    #########  ##  ##       \t ");
+		position(posX,33);		printf("   ##    ##     ## #### ########\t ");
+		
+		if(print!=i){                            //if print=20 (random=2) then head is printed at the end.
+			_sleep(100);
+			position(posX,29);		printf("##     ## ########    ###    ########  ");
+			position(posX,30);		printf("##     ## ##         ## ##   ##     ## ");
+			position(posX,31);		printf("######### ######   ##     ## ##     ## ");
+			position(posX,32);		printf("##     ## ##       ######### ##     ## ");
+			position(posX,33);		printf("##     ## ######## ##     ## ########  "); 
+		}
+	}
+    //winning condition
+	if ((select == 'H' && random==1)||(select == 'T' && random==2)){    
+		position(65,36);
+		printf("You won the Toss");
+		position(62,38);
+		system("pause");
+		getchar();
+		return 1;                     
+	}
+	//losing condition
+	else{
+		position(65,36);
+		printf("You loss the Toss");
+		position(62,38);
+		system("pause");
+		getchar();
+		return 2;
+	}
+}	
 
 //function definition board
 void board(){
