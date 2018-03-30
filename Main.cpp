@@ -361,7 +361,56 @@ int tossResult(char select){
 
 //function definition board
 void board(){
-
+	CONSOLE_SCREEN_BUFFER_INFO info;
+	GetConsoleScreenBufferInfo( GetStdHandle( STD_OUTPUT_HANDLE ), &info );
+	system("CLS");
+	system("color 3f");                           //set text color to white and background color to sky blue
+	countPiecesp1();                                     
+	countPiecesp2();
+	
+	int posX = 8, posY = 2, col = 0, row=0;		
+	/* start printing black and white board */
+ 	for (row = 0; row<8; row++){
+		for (col = 0; col<4; col++){		
+				if(row%2==0){
+					for(int i=0;i<7;i++){	
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),0xf0);
+						position(posX+(col*22), (posY+i)+(row*7));
+						printf("           ");
+						SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );   //to stop color											
+						
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),0x00);
+						position(posX+(col*22)+11, (posY+i)+(row*7));
+						printf("           ");
+						SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );   //to stop color
+					}
+					
+				}
+				else if(row%2==1){
+					for(int i=0;i<7;i++){	
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),0x00);
+						position(posX+(col*22), (posY+i)+(row*7));
+						printf("           ");
+						SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );   //to stop color
+					
+						SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),0xf0);
+						position(posX+(col*22)+11, (posY+i)+(row*7));
+						printf("           ");
+						SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );   //to stop color
+					}
+					
+				}
+		}
+	} /* End printing black and white board */
+	
+	posX =7;
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),63);
+		for(int i=0;i<85;i+=11){
+			position(posX+i, 0);						
+			printf("      %d       ",(i/11)+1);                                   //print column numbers above the board
+		}
+	SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );
+	moveBox();											
 }
 
 //function definition move Box
