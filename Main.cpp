@@ -470,6 +470,93 @@ void moveStore(int turn, char row, int col,char newRow, int newCol ){
 
 //function definition pieces
 void pieces(){
+	
+	CONSOLE_SCREEN_BUFFER_INFO info;
+	GetConsoleScreenBufferInfo( GetStdHandle( STD_OUTPUT_HANDLE ), &info );		
+	
+	int posX = 24, posY = 5, col = 0, row=0;		//starting positions of pieces on the board
+	for (row = 0; row<8; row++){
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),63);
+		position(6, posY);						
+		printf("%c",row+65);                    //print row names
+		SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );
+		
+		for (col = 0; col<8; col++){		
+			posX = posX + ((col - 1)*11);
+			if (boxes[row][col] == 1){			                          //start printing red pieces(player1) from here
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),12);
+				position(posX-4, posY-2);
+				printf("   ===");
+				position(posX-4, posY-1);
+				printf(" //   \\\\");
+				position(posX-4, posY);
+				printf("||  R  ||");
+				position(posX-4, posY+1);
+				printf(" \\\\   //");
+				position(posX-4, posY+2);
+				printf("   ===");
+				SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );
+			}
+			else if (boxes[row][col] == 2){								//start printing white pieces(player2) from here
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
+				position(posX-4, posY-2);
+				printf("   ===");
+				position(posX-4, posY-1);
+				printf(" //   \\\\");
+				position(posX-4, posY);
+				printf("||  W  ||");
+				position(posX-4, posY+1);
+				printf(" \\\\   //");
+				position(posX-4, posY+2);
+				printf("   ===");
+				SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );
+			}
+			else if (boxes[row][col] == 3){							//start printing red-king pieces(player1) from here
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),9);
+				position(posX-4, posY-2);
+				printf("   ===");
+				position(posX-4, posY-1);
+				printf(" //   \\\\");
+				position(posX-4, posY);
+				printf("|| R K ||");
+				position(posX-4, posY+1);
+				printf(" \\\\   //");
+				position(posX-4, posY+2);
+				printf("   ===");
+				SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );	
+			}
+			else if (boxes[row][col] == 4){							//start printing white-king pieces(player2) from here
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),14);
+				position(posX-4, posY-2);
+				printf("   ===");
+				position(posX-4, posY-1);
+				printf(" //   \\\\");
+				position(posX-4, posY);
+				printf("|| W K ||");
+				position(posX-4, posY+1);
+				printf(" \\\\   //");
+				position(posX-4, posY+2);
+				printf("   ===");
+				SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );
+			}
+			else if(boxes[row][col] == 0){							//start printing empty spaces from here
+				SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),15);
+				position(posX-4, posY-2);
+				printf("         ");
+				position(posX-4, posY-1);
+				printf("         ");
+				position(posX-4, posY);
+				printf("         ");
+				position(posX-4, posY+1);
+				printf("         ");
+				position(posX-4, posY+2);
+				printf("         ");				
+				SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );	
+			}
+			posX = 24;									//resetting the horizontal position to first column
+		}
+		posY += 7;										//increasing the vertical position
+	}
 
 }
 
