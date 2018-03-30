@@ -415,12 +415,57 @@ void board(){
 
 //function definition move Box
 void moveBox(){	
-
+	CONSOLE_SCREEN_BUFFER_INFO info;
+	GetConsoleScreenBufferInfo( GetStdHandle( STD_OUTPUT_HANDLE ), &info );
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),243);
+	/* Start printing box for saving moves */	
+	for(int x=0;x<=2;x++){
+		for (int y = 10; y<=57; y++){
+			position(105,y);
+			printf("                        \xb3                        ");
+		}
+	}
+	for (int x = 105; x<=153; x++){
+		position(x, 13);
+		printf("\x16");
+		position(x, 57);
+		printf("\x16");
+	}
+	/* End printing box for saving moves */
+	SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );
+	
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),240);
+	position(111,11);
+	printf("Player 1 moves");
+	if(choice==5){                               //for player vs player mod
+		position(135,11);
+		printf("Player 2 moves");
+	}
+	if(choice==4){                              //for player vs computer mod
+		position(134,11);
+		printf("Computer's moves");
+	}
+	SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );
 }
 
 //function definition move store
 void moveStore(int turn, char row, int col,char newRow, int newCol ){	
-
+	CONSOLE_SCREEN_BUFFER_INFO info;
+	GetConsoleScreenBufferInfo( GetStdHandle( STD_OUTPUT_HANDLE ), &info );
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),240);
+		static int posMove1 = 15;                           //set y co-ordinate of first stored move of player 1
+		static int posMove2 = 15;                           //set y co-ordinate of first stored move of player 2
+		if(turn==1){
+			position(115,posMove1);
+			posMove1++;
+			printf("%c%d %c%d", row, col, newRow, newCol);           //print moves of player 1
+		}
+		else if(turn==2){
+			position(139,posMove2);
+			posMove2++;
+			printf("%c%d %c%d", row, col, newRow, newCol);           //print moves of player 2
+		}
+	SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), info.wAttributes );
 }
 
 //function definition pieces
