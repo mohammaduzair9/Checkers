@@ -849,7 +849,57 @@ int countPiecesp2(){
 
 //function to print result
 void win(int result){
-
+	/* Start Printing Win box */
+	position(39,15);
+	for(int i=0; i<72;i++){
+		printf("\x16");
+		for (int j=72;j<i;j++){
+			position(39,16);
+			printf("\x19 \t\t\t\t\t\t\t\t      \x19");
+		}
+	}
+	puts("");
+	for(int row=0;row<28;row++){
+		position(39,16+row);
+		printf("\x19\t\t                                                      \x19\n");
+	}
+	position(39,43);
+	for(int i=0; i<72;i++)
+		printf("\x16");
+	/* End Printing Win box */
+	if (result == 1){
+		position(57,22);
+		printf("___  _    ____ _   _ ____ ____    .\n");
+		position(57,23);
+		printf("|__] |    |__|  \\_/  |___ |__/   /| \n");
+		position(57,24);
+		printf("|    |___ |  |   |   |___ |  \\   _|_\n");
+	}
+	else if (result == 2){
+		position(56,22);
+		printf("___  _    ____ _   _ ____ ____    ___\n");
+		position(56,23);
+		printf("|__] |    |__|  \\_/  |___ |__/   '___\\\n");
+		position(56,24);
+		printf("|    |___ |  |   |   |___ |  \\   |____\n");	
+	}
+	else {
+		position(56,22);
+		printf("____ ____ _  _ ___  _  _ ___ ____ ____ ");
+		position(56,23);
+		printf("|    |  | |\\/| |__] |  |  |  |___ |__/ ");
+		position(56,24);
+		printf("|___ |__| |  | |    |__|  |  |___ |  \\ ");
+	}
+                                       
+	position(57,30);	printf("##      ##  ####  ##    ##   ######  \n");
+	position(57,31);	printf("##  ##  ##   ##   ###   ##  ##    ## \n");
+	position(57,32);	printf("##  ##  ##   ##   ####  ##  ##       \n");
+	position(57,33);	printf("##  ##  ##   ##   ## ## ##   ######  \n");
+	position(57,34);	printf("##  ##  ##   ##   ##  ####        ## \n");
+	position(57,35);	printf("##  ##  ##   ##   ##   ###  ##    ## \n");
+	position(57,36);	printf("###/  \\###  ####  ##    ##   ###### \n"); 
+	position(57,40);	exit(0);
 }
 //function to convert the row names into integers(row numbers) entered by user
 int convert(char val){
