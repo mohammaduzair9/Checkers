@@ -901,13 +901,84 @@ void win(int result){
 	position(57,36);	printf("###/  \\###  ####  ##    ##   ###### \n"); 
 	position(57,40);	exit(0);
 }
+
 //function to convert the row names into integers(row numbers) entered by user
 int convert(char val){
-
+	
+	switch(val){
+	case 'A':case 'a':
+			return 0;
+			break;
+	case 'B':case 'b':
+			return 1;
+			break;
+	case 'C':case 'c':
+			return 2;
+			break;
+	case 'D':case 'd':
+			return 3;
+			break;
+	case 'E':case 'e':
+			return 4;
+			break;
+	case 'F':case 'f':
+			return 5;
+			break;
+	case 'G':case 'g':
+			return 6;
+			break;
+	case 'H':case 'h':
+			return 7;
+			break;
+	}
 }
 
 bool timer(int player){
+	
+	static int p1TimeSec=59;
+	static int p2TimeSec=59;
+	static int p1TimeMin=14;
+	static int p2TimeMin=14;
+    
+	static int first=1;
+	if(first==1){                                       //condition for printing this only once
+	position(105,13);
+	printf("  Time left :: 15 : 00    ");
+	position(130,13);
+	printf("  Time left :: 15 : 00   ");
+	first++;
+	}
+    while ( ! _kbhit()){			                   //Check for keyboard hit
+        	_sleep(1000);
+			//start time for player1
+			if(player==1){                             
+				if(p1TimeSec==0){
+					p1TimeMin--;
+					p1TimeSec=60;
+				}
 
+				position(105,13);
+				printf("  Time left :: %02d : %02d   ",p1TimeMin,p1TimeSec--);            //print player1 time
+				position(127, 8);
+				if(p1TimeMin<=0 && p1TimeSec==0){
+					return 0;                                            //return 0 if player1 time ends
+				}
+			}
+			//start time for player2
+			if(player==2){
+				if(p2TimeSec==0){
+					p2TimeMin--;
+					p2TimeSec=60;
+				}
+				position(130,13);
+				printf("  Time left :: %d : %d   ",p2TimeMin,p2TimeSec--);           //print player2 time
+				position(127, 8);
+				if(p2TimeMin<=0 && p2TimeSec==0){
+					return 0;                                         //return 0 if player2 time ends
+				}
+			}
+		}
+	return 1;                                                        //return 1 if both players have remaining time
 }
 
 bool noMoves(int player){
