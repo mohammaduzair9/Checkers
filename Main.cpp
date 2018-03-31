@@ -810,12 +810,41 @@ void checkKing(){
 
 //function for counting pieces of player 1
 int countPiecesp1(){
-
+	int posX=105;
+	int count=0;
+	/* start counting pieces of player 1 */
+	for(int i=0;i<8;i++){
+		for(int j=0;j<8;j++){
+			if(boxes[i][j]==1 || boxes[i][j]==3)        
+				count++;
+		}	
+	} /* End counting pieces of player 1 */
+	position(posX,2);
+	printf("------------------------");
+	position(posX,3);
+	printf("|  Red  Pieces =  %02d   |",count);
+	position(posX,4);
+	printf("------------------------");
+	return count;
 }
-
 //function for counting pieces of player 2
 int countPiecesp2(){
-
+	int posX=130;
+	int count=0;
+	/* start counting pieces of player 2 */
+	for(int i=0;i<8;i++){
+		for(int j=0;j<8;j++){
+			if(boxes[i][j]==2 || boxes[i][j]==4)
+				count++;
+		}			
+	} /* End counting pieces of player 1 */
+	position(posX,2);
+	printf(" -----------------------");
+	position(posX,3);
+	printf(" |  White Pieces =  %02d |",count);
+	position(posX,4);
+	printf(" -----------------------");
+	return count;
 }
 
 //function to print result
