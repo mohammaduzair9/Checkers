@@ -748,12 +748,64 @@ bool moveUp(int type, int row,int col,int newRow,int newCol){
 }
 
 bool backFor(int type, int row,int col,int newRow,int newCol){
-
+	//forward backword double check by king
+	
+	if(newCol == col - 4 || newCol == col + 4){
+		if(newCol == col + 4){
+				//right up
+				if((row!= 0 && row!=1) && boxes[row-2][col+2]==0 && boxes[row-1][col+1]!=0 && (boxes[row-1][col+1]==type-1 || boxes[row-1][col+1]==type+1 || boxes[row-1][col+1]==type-3 || boxes[row-1][col+1]==type+3)  && (boxes[row-1][col+3]==type-1 || boxes[row-1][col+3]==type+1 || boxes[row-1][col+3]==type-3) && ( boxes[row-1][col+3]!= 0 )){
+					boxes[row-1][col+1]=0;
+					boxes[row-1][col+3]=0;
+					boxes[newRow][newCol]=boxes[row][col];
+					boxes[row][col]=0;
+					return 1;
+				}
+				//right down
+				else if((row!= 6 && row!=7) && boxes[row+2][col+2]==0 && boxes[row+1][col+1]!=0 && (boxes[row+1][col+1]==type-1 || boxes[row+1][col+1]==type+1 || boxes[row+1][col+1]==type-3 || boxes[row+1][col+1]==type+3)  && (boxes[row+1][col+3]==type-1 || boxes[row+1][col+3]==type+1 || boxes[row+1][col+3]==type-3) && (boxes[row+1][col+3]!=0)){
+					boxes[row+1][col+1]=0;
+					boxes[row+1][col+3]=0;
+					boxes[newRow][newCol]=boxes[row][col];
+					boxes[row][col]=0;
+					return 1;
+				}
+				else{
+					return 0;
+				}
+			}
+		else if(newCol == col - 4){
+				//left up
+				if((row!= 0 && row!=1) && boxes[row-2][col-2]==0 && (boxes[row-1][col-1]!=0) && (boxes[row-1][col-1]==type-1 || boxes[row-1][col-1]==type+1 || boxes[row-1][col-1]==type-3 || boxes[row-1][col-1]==type+3)  && (boxes[row-1][col-3]==type-1 || boxes[row-1][col-3]==type+1 || boxes[row-1][col-3]==type-3) && (boxes[row-1][col-3]!=0)){
+					boxes[row-1][col-1]=0;
+					boxes[row-1][col-3]=0;
+					boxes[newRow][newCol]=boxes[row][col];
+					boxes[row][col]=0;
+					return 1;
+				}
+				//left down
+				else if((row!= 6 && row!=7) && boxes[row+2][col-2]==0 && (boxes[row+1][col-1]!=0) && (boxes[row+1][col-1]==type-1 || boxes[row+1][col-1]==type+1 || boxes[row+1][col-1]==type-3 || boxes[row+1][col-1]==type+3)  && (boxes[row+1][col-3]==type-1 || boxes[row+1][col-3]==type+1 || boxes[row+1][col-3]==type-3) && (boxes[row+1][col-3]!=0)){
+					boxes[row+1][col-1]=0;
+					boxes[row+1][col-3]=0;
+					boxes[newRow][newCol]=boxes[row][col];
+					boxes[row][col]=0;
+					return 1;
+				}
+				else{
+					return 0;
+				}
+			
+			}
+	}
+	else
+		return 0;
 }
-
 //function for checking new kings
 void checkKing(){
-
+	for(int i=0;i<8;i++){
+		if(boxes[7][i]==1)           //red piece becomes king if it reaches to last row
+			boxes[7][i]=3;
+		if(boxes[0][i]==2)           //white piece becomes king if it reaches to first row
+			boxes[0][i]=4;
+	}
 }
 
 //function for counting pieces of player 1
