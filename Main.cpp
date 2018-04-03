@@ -562,7 +562,83 @@ void pieces(){
 
 //definition of player turn
 void playerTurn(int player){
+	SetConsoleTitle( TEXT( "The Checkers" ) );
+	bool valid=0;										//flag value for move validity 
+	int row, col, newRow, newCol;						//for storing the moves entered by player
+	char oldRowChar,newRowChar;
 
+	while(valid!=1){
+		position(105, 6);
+		if(player==1)	
+			printf("Player1 Your Move [Row][Column] [newRow][newCol]:");
+		if(player==2)	
+			printf("Player2 Your Move [Row][Column] [newRow][newCol]:");
+		if(player==3)	
+			printf("Computer's   Move [Row][Column] [newRow][newCol]:");
+
+		position(127, 8);
+		printf("__ __        ");
+		position(127, 8);
+		
+		if(player==1){
+				bool Moves;
+				Moves = noMoves(1);
+				if(Moves==1){
+					if(choice==4){
+						win(3);
+					}
+					else if(choice==5){
+						win(2);
+						}
+					}
+			}
+		else if(player==2){
+				bool Moves;
+				Moves = noMoves(2);
+				if(Moves==1){
+					win(1);
+			}		
+		}
+
+		//starting the timer for 2 player game
+		if(choice==5){
+			bool time = timer(player);
+			if(time==0){
+				if(player==1)
+					win(2);
+				else if(player==2)
+					win(1);
+			}
+		}
+		
+		//Taking input from player
+		if(player==1 || player==2){
+			
+			scanf_s(" %c ", &oldRowChar);					
+			scanf_s("%d ", &col);					
+			scanf_s(" %c",&newRowChar);
+			scanf_s("%d", &newCol);
+		    getchar();								//to get the enter key
+		
+			row=convert(oldRowChar);				//converting char value of row to int
+			newRow=convert(newRowChar);
+			col--;									//to set values according to array
+			newCol--;
+
+			// checking the validity of moves
+			if(!((newRowChar>=65 && newRowChar<=72) || (newRowChar>=97 && newRowChar<=104))){
+				while ( getchar() != '\n' );		//flushing the input buffer 
+				continue;
+			}
+			else if(!((oldRowChar>=65 && oldRowChar<=72) || (oldRowChar>=97 && oldRowChar<=104))){
+				while ( getchar() != '\n' );		//flushing the input buffer
+				continue;
+			}
+			else if(!((col>=0 && col<=8) && (newCol>=0 && newCol<=8))){
+				while ( getchar() != '\n' );		//flushing the input buffer
+				continue;
+			}
+		}
 }
 
 //defining the move down function
