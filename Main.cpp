@@ -59,6 +59,7 @@ void main(){
 			menu();											//print menu
 	}
 }
+
 //function definition position --> sets the position of cursor
 void position(int x, int y){
 	COORD axis;
