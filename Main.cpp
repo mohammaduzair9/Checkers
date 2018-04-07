@@ -876,7 +876,65 @@ void playerTurn(int player){
 			rowLoc++;
 			}
 		}
+	//Computer tries to save the piece in danger
+		//by using the piece in danger
+		if(search==1){
+			rowLoc=0;				
+			while(!(compPieces[rowLoc][0]==0 && compPieces[rowLoc][1]==0)&&rowLoc<12){
+			
+				//simple piece
+	
+				if(compPieces[rowLoc][2]==1 || compPieces[rowLoc][2]==0){
+				//moving to top row
+				if(compPieces[rowLoc][0]==1 && compPieces[rowLoc][1]<7){
+					if(boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]-1]==1 || boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]-1]==3){
+						row = compPieces[rowLoc][0];
+						col = compPieces[rowLoc][1];
+						newRow = compPieces[rowLoc][0]-1;
+						newCol = compPieces[rowLoc][1]+1;
+						search=0;
+						break;
+					}				
+				}
+				//moving up right
+				if(compPieces[rowLoc][0]>=2 && compPieces[rowLoc][1]<=5){
+					if(boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]-1]==1 || boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]-1]==3){
+						if(boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]+1]==0){
+							if(boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]+2]!=1 && boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]+2]!=3){
+								if((boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]]!=1 && boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]]!=3)||boxes[compPieces[rowLoc][0]][compPieces[rowLoc][1]+2]!=0){
+									row = compPieces[rowLoc][0];
+									col = compPieces[rowLoc][1];
+									newRow = compPieces[rowLoc][0]-1;
+									newCol = compPieces[rowLoc][1]+1;
+									search=0;
+									break;		
+								}
+							}
+						}
+					}
+				}
+				//moving up left
+				if(compPieces[rowLoc][0]>=2 && compPieces[rowLoc][1]>=2){
+					if(boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]+1]==1 || boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]+1]==3){
+						if(boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]-1]==0){
+							if(boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]-2]!=1 && boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]-2]!=3){
+								if((boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]]!=1 && boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]]!=3)||boxes[compPieces[rowLoc][0]][compPieces[rowLoc][1]-2]!=0){
+									row = compPieces[rowLoc][0];
+									col = compPieces[rowLoc][1];
+									newRow = compPieces[rowLoc][0]-1;
+									newCol = compPieces[rowLoc][1]-1;
+									search=0;
+									break;		
+								}
+							}
+						}
+					}
+				}
+			}
+		rowLoc++;
+	}
 
+	}
 }
 
 //defining the move down function
