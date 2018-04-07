@@ -1210,6 +1210,227 @@ bool moveDown(int type,int row,int col,int newRow,int newCol){
 	else{
 		return 0;
 	}
+	//-------------------------------------------------------------------------------------------------------------------------------------------
+		int speed = 1500;			//slowing down the computer move
+		if(player==1){
+			//for player1 simple piece
+			if(boxes[row][col]==1 && boxes[newRow][newCol]==0){					
+					valid = moveDown(boxes[row][col],row,col,newRow,newCol);	//player1 call move down function
+					if(valid==1){
+						checkKing();						//checking for king
+						pieces();							//refreshing the board
+						if(countPiecesp2()==0){				//checking if player has won
+							win(1);
+						}
+						else{
+							moveStore(1,oldRowChar,col+1,newRowChar,newCol+1);	
+							if(choice==5){
+								playerTurn(2);					//calling opponent turn
+							}
+							else{
+								_sleep(speed);
+								playerTurn(3);					//calling computer turn turn
+							}
+						}	
+					}
+					else{
+						continue;
+					}
+			}
+			//for player 1 king piece
+			else if(boxes[row][col]==3){
+					//if moving down
+					if(newRow>row){
+							valid = moveDown(boxes[row][col],row,col,newRow,newCol);
+							if(valid==1){
+								checkKing();						//checking for king
+								pieces();							//refreshing the board
+								if(countPiecesp2()==0){
+									win(1);
+								}
+								else{
+									moveStore(1,oldRowChar,col+1,newRowChar,newCol+1);
+									if(choice==5){
+									playerTurn(2);					//calling opponent turn
+									}
+									else{
+									_sleep(speed);
+									playerTurn(3);					//calling computer turn turn
+									}	
+								}	
+							}
+							else{
+								continue;
+							}
+					}
+					//if moving up
+					else if(newRow<row){
+							valid = moveUp(boxes[row][col],row,col,newRow,newCol);
+							if(valid==1){
+								checkKing();						//checking for king
+								pieces();							//refreshing the board
+								if(countPiecesp2()==0){
+									win(1);
+								}
+								else{
+									moveStore(1,oldRowChar,col+1,newRowChar,newCol+1);
+									if(choice==5){
+									playerTurn(2);					//calling opponent turn
+									}
+									else{
+									_sleep(speed);
+									playerTurn(3);					//calling computer turn turn
+									}
+								}	
+							}
+							else{
+								continue;
+							}
+					}
+					else if(newRow==row){
+							valid = backFor(boxes[row][col],row,col,newRow,newCol);
+							if(valid==1){
+								checkKing();						//checking for queen
+								pieces();							//refreshing the board
+								if(countPiecesp2()==0){
+									win(1);
+								}
+								else{
+									moveStore(1,oldRowChar,col+1,newRowChar,newCol+1);
+									if(choice==5){
+									playerTurn(2);					//calling opponent turn
+									}
+									else{
+									_sleep(speed);
+									playerTurn(3);					//calling computer turn turn
+									}
+								}	
+							}
+							else{
+								playerTurn(1);
+							}
+					}
+			}
+			else{
+				playerTurn(1);
+			}
+	}
+	if(player==2 || player==3){
+			//for player2 simple piece
+			if(boxes[row][col]==2 && boxes[newRow][newCol]==0){					
+					valid = moveUp(boxes[row][col],row,col,newRow,newCol);	//player1 call move down function
+					if(valid==1){
+						checkKing();						//checking for king
+						pieces();							//refreshing the board
+						if(countPiecesp1()==0){				//checking if player has won
+							if (player==2)
+								win(2);
+							else
+								win(3);
+						}
+						else{
+							if(player==3){
+							position(126,8);
+							printf(" %c%d %c%d",oldRowChar,col+1,newRowChar,newCol+1);
+							_sleep(speed);
+							}
+							moveStore(2,oldRowChar,col+1,newRowChar,newCol+1);	
+							playerTurn(1);					//calling opponent turn
+						}	
+					}
+					else{
+						continue;
+					}
+			}
+			//for player 2 king piece
+			else if(boxes[row][col]==4){
+					////if moving sideways
+						if(newRow==row){
+							valid = backFor(boxes[row][col],row,col,newRow,newCol);
+							if(valid==1){
+								checkKing();						//checking for queen
+								pieces();							//refreshing the board
+								if(countPiecesp1()==0){
+									if (player==2)
+										win(2);
+									else
+										win(3);
+								}
+								else{
+									if(player==3){
+									position(126,8);
+									printf(" %c%d %c%d",oldRowChar,col+1,newRowChar,newCol+1);
+									_sleep(speed);
+									}
+									moveStore(2,oldRowChar,col+1,newRowChar,newCol+1);
+									playerTurn(1);					//calling opponent turn
+								}	
+							}
+							else{
+								playerTurn(2);
+							}
+					}
+
+					//if moving down
+					if(newRow>row){
+							valid = moveDown(boxes[row][col],row,col,newRow,newCol);
+							if(valid==1){
+								checkKing();						//checking for king
+								pieces();							//refreshing the board
+								if(countPiecesp1()==0){
+									if (player==2)
+										win(2);
+									else
+										win(3);
+								}
+								else{
+									if(player==3){
+									position(126,8);
+									printf(" %c%d %c%d",oldRowChar,col+1,newRowChar,newCol+1);
+									_sleep(speed);
+									}
+									moveStore(2,oldRowChar,col+1,newRowChar,newCol+1);
+									playerTurn(1);					//calling opponent turn
+								}	
+							}
+							else{
+								continue;
+							}
+					}
+					//if moving up
+					else if(newRow<row){
+							valid = moveUp(boxes[row][col],row,col,newRow,newCol);
+							if(valid==1){
+								checkKing();						//checking for king
+								pieces();							//refreshing the board
+								if(countPiecesp1()==0){
+									if (player==2)
+										win(2);
+									else
+										win(3);
+								}
+								else{
+									if(player==3){
+									position(126,8);
+									printf(" %c%d %c%d",oldRowChar,col+1,newRowChar,newCol+1);
+									_sleep(speed);
+									}
+									moveStore(2,oldRowChar,col+1,newRowChar,newCol+1);
+									playerTurn(1);					//calling opponent turn
+								}	
+							}
+							else{
+								continue;
+							}
+						}
+					}
+			
+			else{
+				playerTurn(2);
+			}
+	}
+	}
+}
 }
 
 //defining the move up function
