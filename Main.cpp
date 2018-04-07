@@ -22,11 +22,43 @@ int boxes[8][8] = { {-1, 1,-1, 1,-1, 1,-1, 1 },
 					{-1, 2,-1, 2,-1, 2,-1, 2 }, 
 					{ 2,-1, 2,-1, 2,-1, 2,-1 } };
 
-void main()
-{	
+void main(){	
+	HWND consoleWindow = GetConsoleWindow();
+	SetWindowPos( consoleWindow, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER );	
+	SetConsoleTitle( TEXT( "The Checkers" ) );
 
+	system("mode 168,64");									//for adjusting the console screen
+	system("color 3f");
+	int tossCoin;
+    int printMenu=1;										//flag used for returning to menu screen
+	welcome();						     					//printing the welcome screen
+	while(printMenu){
+		choice=menu();								   		//print menu	
+		if(choice == 0)
+			menu();											//print menu
+		else if(choice==2 ){
+			instruction();									//print instruction
+			continue;}               
+		else if(choice==3 ){           
+			position(55,42);
+			exit(0);}										//quit the game
+		else if(choice==4 ){
+			board();										//print board
+			pieces();										//print pieces
+			playerTurn(1);}									//set first turn to player1
+		else if(choice==5 ){
+			tossCoin = toss();								//starting the toss 
+			board();										//printing the game board
+			pieces();										//printing the pieces on board	
+			if(tossCoin==1)
+				playerTurn(1);								//set first turn to player1
+			else if(tossCoin==2)
+				playerTurn(2);								//set first turn to player2
+			}
+		else 
+			menu();											//print menu
+	}
 }
-
 //function definition position --> sets the position of cursor
 void position(int x, int y){
 	COORD axis;
@@ -357,7 +389,7 @@ int tossResult(char select){
 		getchar();
 		return 2;
 	}
-}	
+}		
 
 //function definition board
 void board(){
@@ -640,7 +672,7 @@ void playerTurn(int player){
 			}
 		}
 
-		///////////////////////////////////
+    ///////////////////////////////////
 	//---COMPUTER DECIDES THE MOVE---//
 	///////////////////////////////////
 	else{
@@ -765,7 +797,7 @@ void playerTurn(int player){
 					}
 				}
 				
-	/*SIMPLE piece moves*/
+				/*SIMPLE piece moves*/
 				if(compPieces[rowLoc][2]==1 || compPieces[rowLoc][2]==0){	
 					//double check up left
 					if((compPieces[rowLoc][0]-4>=0 && compPieces[rowLoc][1]-4>=0) && boxes[compPieces[rowLoc][0]-4][compPieces[rowLoc][1]-4]==0 && boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]-2]==0 && (boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]-1]==1 || boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]-1]==3) && (boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]-3]==1 || boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]-3]==3)){
@@ -876,7 +908,8 @@ void playerTurn(int player){
 			rowLoc++;
 			}
 		}
-	//Computer tries to save the piece in danger
+
+		//Computer tries to save the piece in danger
 		//by using the piece in danger
 		if(search==1){
 			rowLoc=0;				
@@ -935,6 +968,7 @@ void playerTurn(int player){
 	}
 
 	}
+	
 	//by using other piece
 	if(search==1){
 		rowLoc=0;				
@@ -1118,97 +1152,6 @@ void playerTurn(int player){
 
 		if(search!=0)			//computer looses if no moves are available
 			win(1);
-	}
-}
-
-//defining the move down function
-bool moveDown(int type,int row,int col,int newRow,int newCol){
-	/*checking for a valid move*/
-		
-	//false move if new place is not empty
-	if(boxes[newRow][newCol]!=0){
-		return 0;
-	}
-
-	//false move if player piece is not placed at input position 
-	else if(boxes[row][col]==-1 || boxes[row][col]==0 ){					
-		return 0;
-	}
-
-	//valid move if new place is in diagnol 
-	else if ((newRow == row + 1) && (newCol == col - 1 || newCol == col + 1)){	
-		boxes[newRow][newCol] = boxes[row][col];
-		boxes[row][col] = 0;
-		return 1;
-	}
-
-	//checker by player if checks opponent piece in diagnol
-	else if ((newRow == row + 2) && (newCol == col - 2 || newCol == col + 2)){
-			if ((boxes[newRow - 1][newCol - 1] == type-1 || boxes[newRow - 1][newCol - 1] == type-3 || boxes[newRow - 1][newCol - 1] == type+1 || boxes[newRow - 1][newCol - 1] == type+3) && (boxes[newRow - 1][newCol - 1] !=0) && newCol>col){
-				boxes[newRow - 1][newCol - 1] = 0;
-				boxes[newRow][newCol] = boxes[row][col];
-				boxes[row][col] = 0;
-				return 1;
-			}
-			else if ((boxes[newRow - 1][newCol + 1] == type-1 || boxes[newRow - 1][newCol + 1] == type-3 || boxes[newRow - 1][newCol + 1] == type+1 || boxes[newRow - 1][newCol + 1] == type+3) && (boxes[newRow - 1][newCol + 1] !=0) && newCol<col){
-				boxes[newRow - 1][newCol + 1] = 0;
-				boxes[newRow][newCol] = boxes[row][col];
-				boxes[row][col] = 0;
-				return 1;
-			}
-	}
-
-	//double checker by player
-	else if((newRow == row + 4) && (newCol == col - 4 || newCol == col + 4 || newCol==col)){	
-			if(newCol == col + 4){
-					if(((boxes[row+1][col+1]==type-1 || boxes[row+1][col+1]==type+1 ||  boxes[row+1][col+1]==type+3 || boxes[row+1][col+1]==type-3) && boxes[row+1][col+1]!=0) && boxes[row+2][col+2]==0 && ((boxes[row+3][col+3]==type-1 || boxes[row+3][col+3]==type+1 || boxes[row+3][col+3]==type+3 ||  boxes[row+3][col+3]==type-3) && boxes[row+3][col+3]!=0)){
-						boxes[row+1][col+1]   = 0;
-						boxes[row+3][col+3]   = 0;
-						boxes[newRow][newCol] = boxes[row][col];
-						boxes[row][col]		  = 0;
-						return 1;
-					}
-					else{
-						return 0;
-					}
-			}
-			else if(newCol == col - 4){
-					if(((boxes[row+1][col-1]==type-1 || boxes[row+1][col-1]==type+1 || boxes[row+1][col-1]==type-3 || boxes[row+1][col-1]==type+3)&&boxes[row+1][col-1]!=0) && boxes[row+2][col-2]==0 && ((boxes[row+3][col-3]==type-1 || boxes[row+3][col-3]==type+1 || boxes[row+3][col-3]==type-3 || boxes[row+3][col-3]==type+3)&&boxes[row+3][col-3]!=0)){
-						boxes[row+1][col-1]   = 0;
-						boxes[row+3][col-3]   = 0;
-						boxes[newRow][newCol] = boxes[row][col];
-						boxes[row][col]		  = 0;
-						return 1;
-					}
-					else{
-						return 0;
-					}
-			}
-			else if(newCol == col){
-					if(boxes[row+1][col+1]!=0 && (boxes[row+1][col+1]==type-1 || boxes[row+1][col+1]==type-3 || boxes[row+1][col+1]==type+3 || boxes[row+1][col+1]==type+1) && ((boxes[row+3][col+1]==type-1 || boxes[row+3][col+1]==type-3 ||  boxes[row+3][col+1]==type+3 || boxes[row+3][col+1]==type+1)&&boxes[row+3][col+1]!=0) && boxes[row+2][col+2]==0){
-						boxes[row+1][col+1]   = 0;
-						boxes[row+3][col+1]   = 0;
-						boxes[newRow][newCol] = boxes[row][col];
-						boxes[row][col]		  = 0;
-						return 1;
-					}
-					else if(boxes[row+1][col-1]!=0 && (boxes[row+1][col-1]==type-1 || boxes[row+1][col-1]==type+3 || boxes[row+1][col-1]==type-3 || boxes[row+1][col-1]==type+1)  && (boxes[row+3][col-1]!=0 && (boxes[row+3][col-1]==type-1 || boxes[row+3][col-1]==type+3 || boxes[row+3][col-1]==type-3 || boxes[row+3][col-1]==type+1) && boxes[row+2][col-2]==0)){
-						boxes[row+1][col-1]   = 0;
-						boxes[row+3][col-1]   = 0;
-						boxes[newRow][newCol] = boxes[row][col];
-						boxes[row][col]		  = 0;
-						return 1;
-					}
-					else{
-						return 0;
-					}
-			}
-			else{
-				return 0;
-			}
-	}
-	else{
-		return 0;
 	}
 	//-------------------------------------------------------------------------------------------------------------------------------------------
 		int speed = 1500;			//slowing down the computer move
@@ -1431,6 +1374,96 @@ bool moveDown(int type,int row,int col,int newRow,int newCol){
 	}
 	}
 }
+
+//defining the move down function
+bool moveDown(int type,int row,int col,int newRow,int newCol){
+	/*checking for a valid move*/
+		
+	//false move if new place is not empty
+	if(boxes[newRow][newCol]!=0){
+		return 0;
+	}
+
+	//false move if player piece is not placed at input position 
+	else if(boxes[row][col]==-1 || boxes[row][col]==0 ){					
+		return 0;
+	}
+
+	//valid move if new place is in diagnol 
+	else if ((newRow == row + 1) && (newCol == col - 1 || newCol == col + 1)){	
+		boxes[newRow][newCol] = boxes[row][col];
+		boxes[row][col] = 0;
+		return 1;
+	}
+
+	//checker by player if checks opponent piece in diagnol
+	else if ((newRow == row + 2) && (newCol == col - 2 || newCol == col + 2)){
+			if ((boxes[newRow - 1][newCol - 1] == type-1 || boxes[newRow - 1][newCol - 1] == type-3 || boxes[newRow - 1][newCol - 1] == type+1 || boxes[newRow - 1][newCol - 1] == type+3) && (boxes[newRow - 1][newCol - 1] !=0) && newCol>col){
+				boxes[newRow - 1][newCol - 1] = 0;
+				boxes[newRow][newCol] = boxes[row][col];
+				boxes[row][col] = 0;
+				return 1;
+			}
+			else if ((boxes[newRow - 1][newCol + 1] == type-1 || boxes[newRow - 1][newCol + 1] == type-3 || boxes[newRow - 1][newCol + 1] == type+1 || boxes[newRow - 1][newCol + 1] == type+3) && (boxes[newRow - 1][newCol + 1] !=0) && newCol<col){
+				boxes[newRow - 1][newCol + 1] = 0;
+				boxes[newRow][newCol] = boxes[row][col];
+				boxes[row][col] = 0;
+				return 1;
+			}
+	}
+
+	//double checker by player
+	else if((newRow == row + 4) && (newCol == col - 4 || newCol == col + 4 || newCol==col)){	
+			if(newCol == col + 4){
+					if(((boxes[row+1][col+1]==type-1 || boxes[row+1][col+1]==type+1 ||  boxes[row+1][col+1]==type+3 || boxes[row+1][col+1]==type-3) && boxes[row+1][col+1]!=0) && boxes[row+2][col+2]==0 && ((boxes[row+3][col+3]==type-1 || boxes[row+3][col+3]==type+1 || boxes[row+3][col+3]==type+3 ||  boxes[row+3][col+3]==type-3) && boxes[row+3][col+3]!=0)){
+						boxes[row+1][col+1]   = 0;
+						boxes[row+3][col+3]   = 0;
+						boxes[newRow][newCol] = boxes[row][col];
+						boxes[row][col]		  = 0;
+						return 1;
+					}
+					else{
+						return 0;
+					}
+			}
+			else if(newCol == col - 4){
+					if(((boxes[row+1][col-1]==type-1 || boxes[row+1][col-1]==type+1 || boxes[row+1][col-1]==type-3 || boxes[row+1][col-1]==type+3)&&boxes[row+1][col-1]!=0) && boxes[row+2][col-2]==0 && ((boxes[row+3][col-3]==type-1 || boxes[row+3][col-3]==type+1 || boxes[row+3][col-3]==type-3 || boxes[row+3][col-3]==type+3)&&boxes[row+3][col-3]!=0)){
+						boxes[row+1][col-1]   = 0;
+						boxes[row+3][col-3]   = 0;
+						boxes[newRow][newCol] = boxes[row][col];
+						boxes[row][col]		  = 0;
+						return 1;
+					}
+					else{
+						return 0;
+					}
+			}
+			else if(newCol == col){
+					if(boxes[row+1][col+1]!=0 && (boxes[row+1][col+1]==type-1 || boxes[row+1][col+1]==type-3 || boxes[row+1][col+1]==type+3 || boxes[row+1][col+1]==type+1) && ((boxes[row+3][col+1]==type-1 || boxes[row+3][col+1]==type-3 ||  boxes[row+3][col+1]==type+3 || boxes[row+3][col+1]==type+1)&&boxes[row+3][col+1]!=0) && boxes[row+2][col+2]==0){
+						boxes[row+1][col+1]   = 0;
+						boxes[row+3][col+1]   = 0;
+						boxes[newRow][newCol] = boxes[row][col];
+						boxes[row][col]		  = 0;
+						return 1;
+					}
+					else if(boxes[row+1][col-1]!=0 && (boxes[row+1][col-1]==type-1 || boxes[row+1][col-1]==type+3 || boxes[row+1][col-1]==type-3 || boxes[row+1][col-1]==type+1)  && (boxes[row+3][col-1]!=0 && (boxes[row+3][col-1]==type-1 || boxes[row+3][col-1]==type+3 || boxes[row+3][col-1]==type-3 || boxes[row+3][col-1]==type+1) && boxes[row+2][col-2]==0)){
+						boxes[row+1][col-1]   = 0;
+						boxes[row+3][col-1]   = 0;
+						boxes[newRow][newCol] = boxes[row][col];
+						boxes[row][col]		  = 0;
+						return 1;
+					}
+					else{
+						return 0;
+					}
+			}
+			else{
+				return 0;
+			}
+	}
+	else{
+		return 0;
+	}
 }
 
 //defining the move up function
@@ -1584,7 +1617,6 @@ void checkKing(){
 			boxes[0][i]=4;
 	}
 }
-
 //function for counting pieces of player 1
 int countPiecesp1(){
 	int posX=105;
@@ -1623,7 +1655,6 @@ int countPiecesp2(){
 	printf(" -----------------------");
 	return count;
 }
-
 //function to print result
 void win(int result){
 	/* Start Printing Win box */
@@ -1678,7 +1709,6 @@ void win(int result){
 	position(57,36);	printf("###/  \\###  ####  ##    ##   ###### \n"); 
 	position(57,40);	exit(0);
 }
-
 //function to convert the row names into integers(row numbers) entered by user
 int convert(char val){
 	
@@ -1759,5 +1789,270 @@ bool timer(int player){
 }
 
 bool noMoves(int player){
+	int rowLoc=0;
+	
+	//storing piece locations
+	int pieces[12][3]={0};
+	for(int i=0;i<8;i++){
+		for(int j=0;j<8;j++){
+			if(boxes[i][j]==player || boxes[i][j]==player+2){
+				pieces[rowLoc][0]=i;
+				pieces[rowLoc][1]=j;
+				if(boxes[i][j]==player+2){
+					pieces[rowLoc][2]=1;
+				}
+			rowLoc++;
+			}
+		}
+	}
 
+	if(player==1){
+
+	//double check availablity check
+	rowLoc=0;
+	while(!(pieces[rowLoc][0]==0 && pieces[rowLoc][1]==0) && rowLoc<12){		//searching the array elements
+	/*KING moves*/
+	if(pieces[rowLoc][2]==1){
+		//double check up left
+		if((pieces[rowLoc][0]-4>=0 && pieces[rowLoc][1]-4>=0) && boxes[pieces[rowLoc][0]-4][pieces[rowLoc][1]-4]==0 && boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==2 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==4) && (boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]-3]==2 || boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]-3]==4)){
+			return 0;
+		}
+		//double check up right
+		else if((pieces[rowLoc][0]-4>=0 && pieces[rowLoc][1]+4<8) && boxes[pieces[rowLoc][0]-4][pieces[rowLoc][1]+4]==0 && boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==2 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==4) && (boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]+3]==2 || boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]+3]==4)){			
+			return 0;
+		}
+	}
+	//double check same column up
+	if(pieces[rowLoc][0]-4>=0 && boxes[pieces[rowLoc][0]-4][pieces[rowLoc][1]]==0){
+		//same column from right
+		if(boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==2 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==4) && (boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]+1]==2 || boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]+1]==4)){
+			return 0;
+		}
+		//same column from left
+		if(boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==2 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==4) && (boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]-1]==2 || boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]-1]==4)){
+			return 0;					
+		}
+	}
+	//double check same row
+		//to left
+		if(boxes[pieces[rowLoc][0]][pieces[rowLoc][1]-4]==0){
+			//double check left from up
+			if(boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==2 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==4) && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-3]==2 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-3]==4)){
+				return 0;
+			}
+			//double check left from down
+			if(boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==2 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==4) && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-3]==2 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-3]==4)){
+					return 0;
+			}
+		}
+		//to right
+		if(boxes[pieces[rowLoc][0]][pieces[rowLoc][1]+4]==0){
+			//double check right from up
+			if(boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==2 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==4) && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+3]==2 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+3]==4)){
+				return 0;
+			}
+			//double check right from down
+			if(boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==2 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==4) && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+3]==2 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+3]==4)){
+					return 0;
+			}
+		}
+		rowLoc++;
+	}
+	/*SIMPLE piece moves*/
+	while(!(pieces[rowLoc][0]==0 && pieces[rowLoc][1]==0) && rowLoc<12){		//searching the array elements
+		if(pieces[rowLoc][2]==1 || pieces[rowLoc][2]==0){	
+					//double check up left
+					if((pieces[rowLoc][0]+4>=0 && pieces[rowLoc][1]-4>=0) && boxes[pieces[rowLoc][0]+4][pieces[rowLoc][1]-4]==0 && boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==2 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==4) && (boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]-3]==2 || boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]-3]==4)){
+						return 0;
+					}
+					//double check up right
+					else if((pieces[rowLoc][0]+4>=0 && pieces[rowLoc][1]+4<8) && boxes[pieces[rowLoc][0]+4][pieces[rowLoc][1]+4]==0 && boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==2 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==4) && (boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]+3]==2 || boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]+3]==4)){
+						return 0;
+					}
+					//double check same column up
+					else if(pieces[rowLoc][0]+4>=0 && boxes[pieces[rowLoc][0]+4][pieces[rowLoc][1]]==0){
+						//same column from right
+						if(boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==2 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==4) && (boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]+1]==2 || boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]+1]==4)){
+							return 0;
+						}
+						//same column from right
+						if(boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==2 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==4) && (boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]-1]==2 || boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]-1]==4)){
+							return 0;
+						}
+				}	
+			}
+			rowLoc++;
+	}
+	//computer looking for a single check
+	rowLoc=0;
+		while(!(pieces[rowLoc][0]==0 && pieces[rowLoc][1]==0) && rowLoc<12){
+				/*KING MOVES*/
+				if(pieces[rowLoc][2]==1){
+					//single check up left
+					if((pieces[rowLoc][0]-2>=0 && pieces[rowLoc][1]-2>=0) && boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==3)){
+						return 0;
+					}
+					//single check up right
+					else if((pieces[rowLoc][0]-2>=0 && pieces[rowLoc][1]+2<8) && boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==3)){
+						return 0;
+					}
+					/*Simple moves*/
+				if(pieces[rowLoc][2]==1 || pieces[rowLoc][2]==0){
+					//single check down left
+					if((pieces[rowLoc][0]+2<8 && pieces[rowLoc][1]-2>=0) && boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==3)){
+						return 0;
+					}
+					//single check down right
+					else if((pieces[rowLoc][0]+2<8 && pieces[rowLoc][1]+2<8) && boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==3)){
+						return 0;
+					}	
+				}
+				}		
+		rowLoc++;
+		}
+		rowLoc=0;
+		while(!(pieces[rowLoc][0]==0 && pieces[rowLoc][1]==0) && rowLoc<12){
+			/*King Moves*/
+			if(pieces[rowLoc][2]==1){
+				//moving up
+				if(boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==0 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==0){
+					return 0;
+				}
+			}
+			/*simple piece moves*/
+			if(pieces[rowLoc][2]==1 || pieces[rowLoc][2]==0){
+				//moving down
+				if(boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==0 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==0){
+					return 0;
+				}
+			}
+		rowLoc++;
+		}
+		return 1;
+	}
+
+	if(player==2){
+
+	//double check availablity check
+	rowLoc=0;
+	while(!(pieces[rowLoc][0]==0 && pieces[rowLoc][1]==0) && rowLoc<12){		//searching the array elements
+	
+	/*King moves*/
+		if(pieces[rowLoc][2]==1 || pieces[rowLoc][2]==0){	
+					//double check up left
+					if((pieces[rowLoc][0]+4>=0 && pieces[rowLoc][1]-4>=0) && boxes[pieces[rowLoc][0]+4][pieces[rowLoc][1]-4]==0 && boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==3) && (boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]-3]==1 || boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]-3]==3)){
+						return 0;
+					}
+					//double check up right
+					else if((pieces[rowLoc][0]+4>=0 && pieces[rowLoc][1]+4<8) && boxes[pieces[rowLoc][0]+4][pieces[rowLoc][1]+4]==0 && boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==3) && (boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]+3]==1 || boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]+3]==3)){
+						return 0;
+					}
+					//double check same column up
+					else if(pieces[rowLoc][0]+4>=0 && boxes[pieces[rowLoc][0]+4][pieces[rowLoc][1]]==0){
+						//same column from right
+						if(boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==3) && (boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]+1]==3)){
+							return 0;
+						}
+						//same column from right
+						if(boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==3) && (boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]+3][pieces[rowLoc][1]-1]==3)){
+							return 0;
+						}
+				}	
+			}
+	/*KING moves*/
+	if(pieces[rowLoc][2]==1){
+		//double check up left
+		if((pieces[rowLoc][0]-4>=0 && pieces[rowLoc][1]-4>=0) && boxes[pieces[rowLoc][0]-4][pieces[rowLoc][1]-4]==0 && boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==3) && (boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]-3]==1 || boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]-3]==3)){
+			return 0;
+		}
+		//double check up right
+		else if((pieces[rowLoc][0]-4>=0 && pieces[rowLoc][1]+4<8) && boxes[pieces[rowLoc][0]-4][pieces[rowLoc][1]+4]==0 && boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==3) && (boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]+3]==1 || boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]+3]==3)){			
+			return 0;
+		}
+	}
+	//double check same column up
+	if(pieces[rowLoc][0]-4>=0 && boxes[pieces[rowLoc][0]-4][pieces[rowLoc][1]]==0){
+		//same column from right
+		if(boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==3) && (boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]+1]==3)){
+			return 0;
+		}
+		//same column from left
+		if(boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==3) && (boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]-3][pieces[rowLoc][1]-1]==3)){
+			return 0;					
+		}
+	}
+	//double check same row
+		//to left
+		if(boxes[pieces[rowLoc][0]][pieces[rowLoc][1]-4]==0){
+			//double check left from up
+			if(boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==3) && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-3]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-3]==3)){
+				return 0;
+			}
+			//double check left from down
+			if(boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==3) && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-3]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-3]==3)){
+					return 0;
+			}
+		}
+		//to right
+		if(boxes[pieces[rowLoc][0]][pieces[rowLoc][1]+4]==0){
+			//double check right from up
+			if(boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==3) && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+3]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+3]==3)){
+				return 0;
+			}
+			//double check right from down
+			if(boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==3) && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+3]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+3]==3)){
+					return 0;
+			}
+		}
+		rowLoc++;
+	}
+	
+
+	//computer looking for a single check
+	rowLoc=0;
+		while(!(pieces[rowLoc][0]==0 && pieces[rowLoc][1]==0) && rowLoc<12){
+				/*KING MOVES*/
+				if(pieces[rowLoc][2]==1){
+					//single check up left
+					if((pieces[rowLoc][0]-2>=0 && pieces[rowLoc][1]-2>=0) && boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==3)){
+						return 0;
+					}
+					//single check up right
+					else if((pieces[rowLoc][0]-2>=0 && pieces[rowLoc][1]+2<8) && boxes[pieces[rowLoc][0]-2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==3)){
+						return 0;
+					}
+					/*Simple moves*/
+				if(pieces[rowLoc][2]==1 || pieces[rowLoc][2]==0){
+					//single check down left
+					if((pieces[rowLoc][0]+2<8 && pieces[rowLoc][1]-2>=0) && boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]-2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==3)){
+						return 0;
+					}
+					//single check down right
+					else if((pieces[rowLoc][0]+2<8 && pieces[rowLoc][1]+2<8) && boxes[pieces[rowLoc][0]+2][pieces[rowLoc][1]+2]==0 && (boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==1 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==3)){
+						return 0;
+					}	
+				}
+			}		
+		rowLoc++;
+		}
+		rowLoc=0;
+		while(!(pieces[rowLoc][0]==0 && pieces[rowLoc][1]==0) && rowLoc<12){
+			/*King Moves*/
+			if(pieces[rowLoc][2]==1 || pieces[rowLoc][2]==0){
+				//moving up
+				if(boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]+1]==0 || boxes[pieces[rowLoc][0]-1][pieces[rowLoc][1]-1]==0){
+					return 0;
+				}
+			}
+			/*simple piece moves*/
+			if(pieces[rowLoc][2]==1){
+				//moving down
+				if(boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]+1]==0 || boxes[pieces[rowLoc][0]+1][pieces[rowLoc][1]-1]==0){
+					return 0;
+				}
+			}
+		rowLoc++;
+		}
+		return 1;
+	}
 }
