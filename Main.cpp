@@ -935,6 +935,190 @@ void playerTurn(int player){
 	}
 
 	}
+	//by using other piece
+	if(search==1){
+		rowLoc=0;				
+		while(!(compPieces[rowLoc][0]==0 && compPieces[rowLoc][1]==0)&&rowLoc<12){
+			//king piece
+			if(compPieces[rowLoc][2]==1){
+			//moving down right
+				if(boxes[compPieces[rowLoc][0]+1][compPieces[rowLoc][1]+1]==0){
+					if(compPieces[rowLoc][0]<=4 && compPieces[rowLoc][1]<=4){
+						if(((boxes[compPieces[rowLoc][0]+2][compPieces[rowLoc][1]+2]==2 || boxes[compPieces[rowLoc][0]+2][compPieces[rowLoc][1]+2]==4) &&(boxes[compPieces[rowLoc][0]+3][compPieces[rowLoc][1]+3]==1 || boxes[compPieces[rowLoc][0]+3][compPieces[rowLoc][1]+3]==3))){
+							row = compPieces[rowLoc][0];
+							col = compPieces[rowLoc][1];
+							newRow = compPieces[rowLoc][0]+1;
+							newCol = compPieces[rowLoc][1]+1;
+							search=0;
+							break;	
+						}
+					}
+					if(compPieces[rowLoc][0]<=4 && compPieces[rowLoc][1]>=1){
+						if(((boxes[compPieces[rowLoc][0]+2][compPieces[rowLoc][1]]==2 || boxes[compPieces[rowLoc][0]+2][compPieces[rowLoc][1]]==4) &&(boxes[compPieces[rowLoc][0]+3][compPieces[rowLoc][1]-1]==1 || boxes[compPieces[rowLoc][0]+3][compPieces[rowLoc][1]-1]==3))){
+							row = compPieces[rowLoc][0];
+							col = compPieces[rowLoc][1];
+							newRow = compPieces[rowLoc][0]+1;
+							newCol = compPieces[rowLoc][1]+1;
+							search=0;
+							break;
+						}
+					}
+					
+				}
+				//moving down left
+				if(boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]-1]==0){
+					if(compPieces[rowLoc][0]>=3 && compPieces[rowLoc][1]>=3){
+						if(((boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]-2]==2 || boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]-2]==4) &&(boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]-3]==1 || boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]-3]==3))){
+							row = compPieces[rowLoc][0];
+							col = compPieces[rowLoc][1];
+							newRow = compPieces[rowLoc][0]-1;
+							newCol = compPieces[rowLoc][1]-1;
+							search=0;
+							break;	
+						}
+					}
+					if(compPieces[rowLoc][0]>=3 && compPieces[rowLoc][1]<=6){
+						if(((boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]]==2 || boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]]==4) &&(boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]+1]==1 || boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]+1]==3))){
+							row = compPieces[rowLoc][0];
+							col = compPieces[rowLoc][1];
+							newRow = compPieces[rowLoc][0]-1;
+							newCol = compPieces[rowLoc][1]-1;
+							search=0;
+							break;
+						}
+					}
+					
+				}
+
+
+			}
+			//simple piece
+			if(compPieces[rowLoc][2]==1 || compPieces[rowLoc][2]==0){
+			//moving top right
+				if(boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]+1]==0){
+					if(compPieces[rowLoc][0]>=3 && compPieces[rowLoc][1]<=4){
+						if(((boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]+2]==2 || boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]+2]==4) &&(boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]+3]==1 || boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]+3]==3))){
+							row = compPieces[rowLoc][0];
+							col = compPieces[rowLoc][1];
+							newRow = compPieces[rowLoc][0]-1;
+							newCol = compPieces[rowLoc][1]+1;
+							search=0;
+							break;	
+						}
+					}
+					if(compPieces[rowLoc][0]>=3 && compPieces[rowLoc][1]>=1){
+						if(((boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]]==2 || boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]]==4) &&(boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]-1]==1 || boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]-1]==3))){
+							row = compPieces[rowLoc][0];
+							col = compPieces[rowLoc][1];
+							newRow = compPieces[rowLoc][0]-1;
+							newCol = compPieces[rowLoc][1]+1;
+							search=0;
+							break;
+						}
+					}
+					
+				}
+				//moving top left
+				if(boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]-1]==0){
+					if(compPieces[rowLoc][0]>=3 && compPieces[rowLoc][1]>=3){
+						if(((boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]-2]==2 || boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]-2]==4) &&(boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]-3]==1 || boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]-3]==3))){
+							row = compPieces[rowLoc][0];
+							col = compPieces[rowLoc][1];
+							newRow = compPieces[rowLoc][0]-1;
+							newCol = compPieces[rowLoc][1]-1;
+							search=0;
+							break;	
+						}
+					}
+					if(compPieces[rowLoc][0]>=3 && compPieces[rowLoc][1]<=6){
+						if(((boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]]==2 || boxes[compPieces[rowLoc][0]-2][compPieces[rowLoc][1]]==4) &&(boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]+1]==1 || boxes[compPieces[rowLoc][0]-3][compPieces[rowLoc][1]+1]==3))){
+							row = compPieces[rowLoc][0];
+							col = compPieces[rowLoc][1];
+							newRow = compPieces[rowLoc][0]-1;
+							newCol = compPieces[rowLoc][1]-1;
+							search=0;
+							break;
+						}
+					}
+					
+				}
+
+		
+		}
+		rowLoc++;
+		}
+
+	}
+
+	//if no checking option computer make a simple move
+	if(search==1){
+		rowLoc=0;				
+		while(!(compPieces[rowLoc][0]==0 && compPieces[rowLoc][1]==0)&&rowLoc<12){
+			/*KING moves*/
+			if(compPieces[rowLoc][2]==1){
+				//move down left	
+				if(boxes[compPieces[rowLoc][0]+1][compPieces[rowLoc][1]-1]==0){
+						row=compPieces[rowLoc][0];
+						col=compPieces[rowLoc][1];
+						newRow=compPieces[rowLoc][0]+1;
+						newCol=compPieces[rowLoc][1]-1;
+						search=0;
+					
+						if((boxes[newRow+1][newCol-1]!=3) && (boxes[newRow+1][newCol+1]!=3 || boxes[newRow-1][newCol-1]!=0 || boxes[newRow-1][newCol-1]!=1 || boxes[newRow-1][newCol-1]!=3) && !((boxes[row+1][col+1]==2||boxes[row+1][col+1]==4) && (boxes[row+2][col+2]==1 ||boxes[row+2][col+2]==3))){
+							break;
+						}
+					}
+				//move down right
+				    if(boxes[compPieces[rowLoc][0]+1][compPieces[rowLoc][1]+1]==0 ){
+						row=compPieces[rowLoc][0];
+						col=compPieces[rowLoc][1];
+						newRow=compPieces[rowLoc][0]+1;
+						newCol=compPieces[rowLoc][1]+1;
+						search=0;
+						
+						if( (boxes[newRow+1][newCol+1]!=3) && (boxes[newRow+1][newCol-1]!=3 || boxes[newRow-1][newCol+1]!=0 || boxes[newRow-1][newCol+1]!=1 || boxes[newRow-1][newCol+1]!=3) && !((boxes[row+1][col-1]==2||boxes[row+1][col-1]==4) && (boxes[row+2][col-2]==1 ||boxes[row+2][col-2]==3))){
+							break;
+						}
+					}	
+				
+			}
+			/*SIMPLE piece moves*/
+			if((compPieces[rowLoc][2]==1 || compPieces[rowLoc][2]==0 ) ){	
+					//move up right
+					if(compPieces[rowLoc][0]-1>=0 && compPieces[rowLoc][1]-1<=8 && boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]+1]==0){
+						row=compPieces[rowLoc][0];
+						col=compPieces[rowLoc][1];
+						newRow=compPieces[rowLoc][0]-1;
+						newCol=compPieces[rowLoc][1]+1;
+						search=0;
+						if( (((boxes[newRow-1][newCol+1]!=1 && boxes[newRow-1][newCol+1]!=3) && (boxes[newRow-1][newCol-1]!=1 && boxes[newRow-1][newCol-1]!=3 || boxes[newRow+1][newCol+1]!=0) && !((boxes[row-1][col-1]==2||boxes[row-1][col-1]==4) && (boxes[row-2][col-2]==1 ||boxes[row-2][col-2]==3))))){
+							break;
+						}
+					}
+					
+				
+					//move up left
+					 if(compPieces[rowLoc][0]-1>=0 && compPieces[rowLoc][1]-1>=0  && boxes[compPieces[rowLoc][0]-1][compPieces[rowLoc][1]-1]==0 ){
+						row=compPieces[rowLoc][0];
+						col=compPieces[rowLoc][1];
+						newRow=compPieces[rowLoc][0]-1;
+						newCol=compPieces[rowLoc][1]-1;
+						search=0;
+						if( (boxes[newRow-1][newCol-1]!=1 && boxes[newRow-1][newCol-1]!=3) && (boxes[newRow-1][newCol+1]!=1 && boxes[newRow-1][newCol+1]!=3 || boxes[newRow+1][newCol-1]!=0) && !((boxes[row-1][col+1]==2||boxes[row-1][col+1]==4) && (boxes[row-2][col+2]==1 ||boxes[row-2][col+2]==3))){
+							break;
+						}
+					}
+						
+			}
+		rowLoc++;	
+		}
+	}
+		oldRowChar=row+97;		//changing in character for storing moves
+		newRowChar=newRow+97;
+
+		if(search!=0)			//computer looses if no moves are available
+			win(1);
+	}
 }
 
 //defining the move down function
